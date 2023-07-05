@@ -5,7 +5,7 @@ from folder root-files.
 All DUT specific adjustements can be made in the DUTConfig dictionary. The 
 plotter assumes pixel matrix with rectangular pixels.  
 
-python histo-plotter-tj2.py --ifile=root-files/Histos-<something>.root
+python histo-plotter-tj2.py --colstart 110 --colstop 200 --ifile=root-files/Histos-<something>.root
 
 Author: Benjamin Schwenker <benjamin.schwenker@phys.uni-goettingen.de>  
 """
