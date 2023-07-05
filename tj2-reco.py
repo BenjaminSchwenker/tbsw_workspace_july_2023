@@ -10,6 +10,7 @@ Usage:
 python3 tj2-reco.py   --runno 660  --gearfile gear_geoid12.xml
 
 
+
 To activate the clusterderDB for position reconstruction instead of center of gravity, 
 run command with prefix "_clustdb"
 
@@ -527,6 +528,7 @@ if __name__ == '__main__':
   caltag = args.caltag
   prefix = args.prefix
   rawfile = args.datapath + 'run000{:d}.txt'.format(runno)
+
   
   if prefix == '':
     useClusterDB = False
