@@ -76,7 +76,7 @@ def add_pixelmaskers(path):
   tj2hotpixelkiller = Processor(name="TJ2HotPixelKiller", proctype="HotPixelKiller")
   tj2hotpixelkiller.param("InputCollectionName", "zsdata_tj2")
   tj2hotpixelkiller.param("MaxNormedOccupancy", 5)
-  tj2hotpixelkiller.param("MinNormedOccupancy", -1)  
+  tj2hotpixelkiller.param("MinNormedOccupancy", 0.1)  
   tj2hotpixelkiller.param("NoiseDBFileName", "localDB/NoiseDB-TJ2.root")
   tj2hotpixelkiller.param("OfflineZSThreshold", 0)
   path.add_processor(tj2hotpixelkiller)  
@@ -527,7 +527,7 @@ if __name__ == '__main__':
   runno = args.runno
   caltag = args.caltag
   prefix = args.prefix
-  rawfile = args.datapath + 'run000{:d}.txt'.format(runno)
+  rawfile = args.datapath + 'run{:06d}.txt'.format(runno)
 
   
   if prefix == '':
