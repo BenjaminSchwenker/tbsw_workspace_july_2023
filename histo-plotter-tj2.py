@@ -55,7 +55,7 @@ histofile = ROOT.TFile( 'Plotter-' + os.path.basename(inputfilename), 'RECREATE'
 residuals.plot(inputfile, histofile, basecut="hasTrack==0 && localChi2<20", Config=DUTConfig)
     
 # Add efficiency plots   
-efficiency.plot(inputfile, histofile, basecut="", matchcut="hasHit==0 && localChi2<20", uaxis=(128,0,512), vaxis=(128,0,512))
+efficiency.plot(inputfile, histofile, basecut="", matchcut="hasHit==0 && localChi2<20", uaxis=(512,0,512), vaxis=(512,0,512))
     
 # Add superpixel in-pixel charge plots 
 inpixel.plot_superpixel(inputfile, histofile, pixeltype=0, upitch=DUTConfig['pitch_u'], vpitch=DUTConfig['pitch_v'], ubins=20, vbins=20, ufold=2, vfold=2)             
