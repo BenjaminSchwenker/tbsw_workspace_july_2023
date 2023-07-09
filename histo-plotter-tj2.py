@@ -44,13 +44,17 @@ DUTConfig = { 'pitch_u' :          0.033,              # in mm
             }
         
 inputfilename="root-files/Histos-TJ2-run{:06d}-run{:06d}-run{:06d}-reco.root".format(args.runno,args.runno,args.runno)
-    
+
+histofilename=f"Plotter-run{args.runno:06d}-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}.root"
+
+pdffilename=f"Plotter-run{args.runno:06d}-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}.pdf"
+
 # Open files with reconstructed run data 
 inputfile = ROOT.TFile( inputfilename, 'READ' )    
     
 # Create one histofile per run  
-histofile = ROOT.TFile( 'Plotter-' + os.path.basename(inputfilename), 'RECREATE', 'Histos created from file ' + inputfilename )
-    
+histofile = ROOT.TFile( histofilename, 'RECREATE', 'Histos created from file ' + inputfilename )
+
 # Add residual plots 
 residuals.plot(inputfile, histofile, basecut="hasTrack==0 && localChi2<20", Config=DUTConfig)
     
@@ -67,8 +71,8 @@ efficiency.plot_super_inpix(inputfile, histofile, basecut="maskedPixel==0 && cel
 efficiency.extract_roi(inputfile, basecut="maskedPixel==0 && cellU_fit>{} && cellU_fit<{} && cellV_fit> {} && cellV_fit<{}".format(args.colstart, args.colstop,args.rowstart,args.rowstop), matchcut="hasHit==0 && localChi2<20")
 
 # Make a pdf containing all plots 
-pdfName = os.path.splitext( os.path.basename( inputfilename ) )[0] + '.pdf' 
-residuals.make_pdf(histofile, pdfName)
+#pdfName = os.path.splitext( os.path.basename( inputfilename ) + f"roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}" )[0] + '.pdf' 
+residuals.make_pdf(histofile, pdffilename)
 
 # Close all files 
 histofile.Write()
