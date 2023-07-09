@@ -28,6 +28,8 @@ maxRecordNrShort = 200000
 energy = 4.2
 mass = 0.000511
 
+minNormedoccupancy = -1
+
 
 def add_rawinput(path):
   rawinput = Processor(name="CorryInputProcessor",proctype="CorryInputProcessor")
@@ -45,7 +47,7 @@ def add_unpackers(path):
   Adds unpackers to the path
   """  
 
-  m26unpacker = Processor(name="TelUnpacker", proctype="HitsFilterProcessor") 
+  m26unpacker = Processor(name="TelUnpacker", proctype="HitsFilterProcessor")
   m26unpacker.param("InputCollectionName", "rawdata")
   m26unpacker.param("OutputCollectionName", "zsdata_m26")
   m26unpacker.param("FilterIDs", "0 1 2 3 4 5")
@@ -76,7 +78,7 @@ def add_pixelmaskers(path):
   tj2hotpixelkiller = Processor(name="TJ2HotPixelKiller", proctype="HotPixelKiller")
   tj2hotpixelkiller.param("InputCollectionName", "zsdata_tj2")
   tj2hotpixelkiller.param("MaxNormedOccupancy", 5)
-  tj2hotpixelkiller.param("MinNormedOccupancy", 0.1)  
+  tj2hotpixelkiller.param("MinNormedOccupancy", minNormedoccupancy)
   tj2hotpixelkiller.param("NoiseDBFileName", "localDB/NoiseDB-TJ2.root")
   tj2hotpixelkiller.param("OfflineZSThreshold", 0)
   path.add_processor(tj2hotpixelkiller)  
@@ -519,6 +521,7 @@ if __name__ == '__main__':
   parser.add_argument('--datapath', dest='datapath', default='/home/benjamin/textdump_tbsw/', type=str, help='Path to data')
   parser.add_argument('--runno', dest='runno', type=int, help='Run number')
   parser.add_argument('--caltag', dest='caltag', default='', type=str, help='Name of calibration tag to use')
+  parser.add_argument('--minocc', dest='minocc', default=-1, type=float, help='Minimum normed occupancy')
   parser.add_argument('--prefix', dest='prefix', default='', type=str, help='Name of calibration tag prefix to use')
   args = parser.parse_args()
 
@@ -528,6 +531,7 @@ if __name__ == '__main__':
   caltag = args.caltag
   prefix = args.prefix
   rawfile = args.datapath + 'run{:06d}.txt'.format(runno)
+  minNormedoccupancy = args.minocc
 
   
   if prefix == '':
