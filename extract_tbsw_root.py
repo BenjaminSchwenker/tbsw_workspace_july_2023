@@ -28,13 +28,13 @@ def parse_args():
     return parser.parse_args()
 
 
-def get_object(path,runs):
+def get_object(path,runs,roi):
     if not path.endswith('/'):
         path=path+'/'
     columns = [x.split('/')[-1] for x in selected_keys.keys()]
     df = pd.DataFrame(columns=columns, index=runs)
 
-    root_files = ['Plotter-Histos-TJ2-run000{}-run000{}-run000{}-reco.root'.format(x,x,x) for x in runs]
+    root_files = ['Plotter-run000{}-roi-{}-{}-{}-{}.root'.format(x,roi[0],roi[1],roi[2],roi[3]) for x in runs]
     
     for i,file in enumerate(root_files):
         try:

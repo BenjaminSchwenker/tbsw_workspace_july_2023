@@ -28,7 +28,6 @@ def main(start, stop, only_plot, only_scan):
     df = df.drop_duplicates(subset=['runno'])
     if not only_plot:
         for index in range(len(df.index)):
-            print(index)
             args_scan.append(
                 f"python3 tj2-reco.py --runno {int(df.iloc[index]['runno'])}  --gearfile gear_geoid{int(df.iloc[index]['geoID'])}.xml --minocc {df.iloc[index]['minocc']} --prefix _clustdb")
     
