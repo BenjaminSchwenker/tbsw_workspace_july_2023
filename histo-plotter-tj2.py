@@ -59,19 +59,18 @@ histofile = ROOT.TFile( histofilename, 'RECREATE', 'Histos created from file ' +
 residuals.plot(inputfile, histofile, basecut="hasTrack==0 && localChi2<20", Config=DUTConfig)
     
 # Add efficiency plots   
-efficiency.plot(inputfile, histofile, basecut="", matchcut="hasHit==0 && maskedPixel==0", uaxis=(512,0,512), vaxis=(512,0,512))
+efficiency.plot(inputfile, histofile, basecut="maskedPixel==0", matchcut="hasHit==0", uaxis=(512,0,512), vaxis=(512,0,512))
     
 # Add superpixel in-pixel charge plots 
 inpixel.plot_superpixel(inputfile, histofile, pixeltype=0, upitch=DUTConfig['pitch_u'], vpitch=DUTConfig['pitch_v'], ubins=20, vbins=20, ufold=2, vfold=2)             
       
 # Add superpixel in-pixel efficiency plots 
-efficiency.plot_super_inpix(inputfile, histofile, basecut="maskedPixel==0 && cellU_fit>{} && cellU_fit<{} && cellV_fit> {} && cellV_fit<{}".format(args.colstart, args.colstop,args.rowstart,args.rowstop), matchcut="hasHit==0 && localChi2<20", upitch=DUTConfig['pitch_u'], vpitch=DUTConfig['pitch_v'], ubins=20, vbins=20)
+efficiency.plot_super_inpix(inputfile, histofile, basecut="maskedPixel==0 && cellU_fit>{} && cellU_fit<{} && cellV_fit> {} && cellV_fit<{}".format(args.colstart, args.colstop,args.rowstart,args.rowstop), matchcut="hasHit==0", upitch=DUTConfig['pitch_u'], vpitch=DUTConfig['pitch_v'], ubins=20, vbins=20)
 
 # Compute efficiency (and error) in specified ROI
-efficiency.extract_roi(inputfile, basecut="maskedPixel==0 && cellU_fit>{} && cellU_fit<{} && cellV_fit> {} && cellV_fit<{}".format(args.colstart, args.colstop,args.rowstart,args.rowstop), matchcut="hasHit==0 && localChi2<20")
+efficiency.extract_roi(inputfile, basecut="maskedPixel==0 && cellU_fit>{} && cellU_fit<{} && cellV_fit> {} && cellV_fit<{}".format(args.colstart, args.colstop,args.rowstart,args.rowstop), matchcut="hasHit==0")
 
 # Make a pdf containing all plots 
-#pdfName = os.path.splitext( os.path.basename( inputfilename ) + f"roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}" )[0] + '.pdf' 
 residuals.make_pdf(histofile, pdffilename)
 
 # Close all files 
