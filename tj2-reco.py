@@ -467,8 +467,8 @@ def create_reco_path(Env, rawfile, gearfile, energy, useClusterDB, caltag):
   tj2_analyzer.param("DigitCollection","zsdata_tj2")
   tj2_analyzer.param("DUTPlane","3")
   #tj2_analyzer.param("ReferencePlane","6")
-  tj2_analyzer.param("MaxResidualU","0.2")
-  tj2_analyzer.param("MaxResidualV","0.2")
+  tj2_analyzer.param("MaxResidualU","0.1")
+  tj2_analyzer.param("MaxResidualV","0.1")
   tj2_analyzer.param("RootFileName","Histos-TJ2-{}.root".format(caltag))
   reco_path.add_processor(tj2_analyzer)   
 
@@ -521,7 +521,7 @@ if __name__ == '__main__':
   parser.add_argument('--datapath', dest='datapath', default='/home/benjamin/textdump_tbsw/', type=str, help='Path to data')
   parser.add_argument('--runno', dest='runno', type=int, help='Run number')
   parser.add_argument('--caltag', dest='caltag', default='', type=str, help='Name of calibration tag to use')
-  parser.add_argument('--minocc', dest='minocc', default=-1, type=float, help='Minimum normed occupancy')
+  parser.add_argument('--minocc', dest='minocc', default=0.1, type=float, help='Minimum normed occupancy')
   parser.add_argument('--prefix', dest='prefix', default='', type=str, help='Name of calibration tag prefix to use')
   args = parser.parse_args()
 
