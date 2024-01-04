@@ -10,7 +10,6 @@ Usage:
 python3 tj2-reco.py   --runno 660  --gearfile gear_geoid12.xml
 
 
-
 To activate the clusterderDB for position reconstruction instead of center of gravity, 
 run command with prefix "_clustdb"
 
@@ -78,7 +77,7 @@ def add_pixelmaskers(path):
    
 
   tj2hotpixelkiller = Processor(name="TJ2HotPixelKiller", proctype="HotPixelKiller")
-  tj2hotpixelkiller.param("InputCollectionName", "zsdata_tj2_raw")
+  tj2hotpixelkiller.param("InputCollectionName", "zsdata_tj2")
   tj2hotpixelkiller.param("MaxNormedOccupancy", 5)
   tj2hotpixelkiller.param("MinNormedOccupancy", minNormedoccupancy)
   tj2hotpixelkiller.param("NoiseDBFileName", "localDB/NoiseDB-TJ2.root")
@@ -91,12 +90,8 @@ def add_pixel_calibration(path):
   pixcal = Processor(name="PixelChargeCalibrator",proctype="PixelChargeCalibrator")
   pixcal.param('SparseDataCollectionName', "zsdata_tj2_raw")
   pixcal.param('CalibratedCollectionName', "zsdata_tj2")
-  if args.pixel_cal == False: 
-    pixcal.param('GainCalibrationDBFileName', "/home/bgnet/vtx/tbsw_workspace_tjmp2_desy/steering-files/desy-tb-tj2/TJ2calibrationDBFile_identity.root")
-  else:
-    print('WITH CALIBRATION')
-    calibration_file=str(args.pixel_cal_file)
-    pixcal.param('GainCalibrationDBFileName', calibration_file)
+  print('calibration')
+  pixcal.param('GainCalibrationDBFileName', "W14R12/run579/20230703_234647_calibration.root")
   pixcal.param('CalibFuncName', "calibFunc")
   pixcal.param("CalibParaBaseName", "para")
   path.add_processor(pixcal)
@@ -478,7 +473,7 @@ def create_reco_path(Env, rawfile, gearfile, energy, useClusterDB, caltag):
   trackfinder.param("SingleHitSeeding", "0")
   trackfinder.param("MaxResidualU","0.4")
   trackfinder.param("MaxResidualV","0.4")
-  reco_path.add_processor(trackfinder)
+  reco_path.add_processor(trackfinder)  
 
 
   tj2_analyzer = Processor(name="TJ2Analyzer",proctype="PixelDUTAnalyzer")
@@ -487,8 +482,8 @@ def create_reco_path(Env, rawfile, gearfile, energy, useClusterDB, caltag):
   tj2_analyzer.param("DigitCollection","zsdata_tj2")
   tj2_analyzer.param("DUTPlane","3")
   #tj2_analyzer.param("ReferencePlane","6")
-  tj2_analyzer.param("MaxResidualU","0.2")
-  tj2_analyzer.param("MaxResidualV","0.2")
+  tj2_analyzer.param("MaxResidualU","0.1")
+  tj2_analyzer.param("MaxResidualV","0.1")
   tj2_analyzer.param("RootFileName","Histos-TJ2-{}.root".format(caltag))
   reco_path.add_processor(tj2_analyzer)   
 
@@ -557,7 +552,7 @@ if __name__ == '__main__':
   minNormedoccupancy = args.minocc
 
   
-  if not '_clustdb' in prefix:
+  if prefix == '':
     useClusterDB = False
   else: 
     useClusterDB = True
