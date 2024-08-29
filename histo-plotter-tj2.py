@@ -27,9 +27,12 @@ parser.add_argument('--rowstart', default=1, type=int, help='Start/Lower row of 
 parser.add_argument('--rowstop', default=400, type=int, help='Stop/Upper row of ROI for efficiency')
 parser.add_argument('--calib', default='ToT', type=str, help='Decides range and labels for calibratio in ToT or electron')
 parser.add_argument('--iEvt', default=-1, type=int, help='Decides range and labels for calibratio in ToT or electron')
+parser.add_argument('--CoG', action='store_true', help='Use CoG in filenames')
+parser.add_argument('--prefix', default='CoG', type=str, help='add prefix to used filename')
+
 args = parser.parse_args()
   
-
+print(args.prefix)
 # Every plotting axis is given as a tuple (nbins,min,max) 
 if args.calib == 'ToT':
   DUTConfig = { 'pitch_u' :          0.03304,              # in mm 
@@ -50,8 +53,8 @@ elif args.calib == 'electrons':
               'residual_u_axis':   (151,-0.1,+0.1),    # in mm    
               'residual_v_axis':   (151,-0.1,+0.1),    # in mm 
               'charge_unit':       'electrons' ,   
-              'seed_charge_axis':  (50,0,5000),    
-              'clus_charge_axis':  (50,0,5000), 
+              'seed_charge_axis':  (20,0,2000),    
+              'clus_charge_axis':  (20,0,2000), 
               'ucell_axis':        (512,0,512),        
               'vcell_axis':        (512,0,512),       
               'sensor_u_axis':     (512,-0.5*512*0.03304,0.5*512*0.03304),
@@ -59,34 +62,16 @@ elif args.calib == 'electrons':
             }
         
 if args.calib == 'ToT':
-  if args.iEvt > 0:
-    #inputfilename="root-files/Histos-TJ2-run{:06d}_clustdb-run{:06d}-run{:06d}_clustdb-reco.root".format(args.runno,args.runno,args.runno)
-    inputfilename="root-files/Histos-TJ2-run{:06d}_CoG-run{:06d}-run{:06d}_CoG-reco.root".format(args.runno,args.runno,args.runno)
-    
-    #histofilename=f"Plotter_iEvt/Plotter-run{args.runno:06d}-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}_{args.iEvt}.root"
-    histofilename=f"Plotter_iEvt/Plotter-run{args.runno:06d}_CoG-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}_{args.iEvt}.root"
-
-    #pdffilename=f"Plotter_iEvt/Plotter-run{args.runno:06d}-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}_{args.iEvt}.pdf"
-    pdffilename=f"Plotter_iEvt/Plotter-run{args.runno:06d}_CoG-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}_{args.iEvt}.pdf"   
-  else:
-    #inputfilename="root-files/Histos-TJ2-run{:06d}_clustdb-run{:06d}-run{:06d}_clustdb-reco.root".format(args.runno,args.runno,args.runno)
-    inputfilename="root-files/Histos-TJ2-run{:06d}_CoG-run{:06d}-run{:06d}_CoG-reco.root".format(args.runno,args.runno,args.runno)
-
-    #histofilename=f"Plotter/Plotter-run{args.runno:06d}-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}.root"
-    histofilename=f"Plotter/Plotter-run{args.runno:06d}_CoG-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}.root"
-
-    #pdffilename=f"Plotter/Plotter-run{args.runno:06d}-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}.pdf"
-    pdffilename=f"Plotter/Plotter-run{args.runno:06d}_CoG-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}.pdf"   
-
+  inputfilename="root-files/Histos-TJ2-run{:06d}_{}-run{:06d}-run{:06d}_{}-reco.root".format(args.runno,args.prefix,args.runno,args.runno, args.prefix)
+  print(inputfilename)
+  histofilename=f"Plotter/Plotter-run{args.runno:06d}_{args.prefix}-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}_{args.iEvt}.root"
+  pdffilename=f"Plotter/Plotter-run{args.runno:06d}_{args.prefix}-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}_{args.iEvt}.pdf"
 elif args.calib == 'electrons':
-  #inputfilename="root-files/Histos-TJ2-run{:06d}_clustdb_cal-run{:06d}-run{:06d}_clustdb_cal-reco.root".format(args.runno,args.runno,args.runno)
-  inputfilename="root-files/Histos-TJ2-run{:06d}_CoG_cal-run{:06d}-run{:06d}_CoG_cal-reco.root".format(args.runno,args.runno,args.runno)
-
-  #histofilename=f"Plotter_cal/Plotter-run{args.runno:06d}-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}.root"
-  histofilename=f"Plotter_cal/Plotter-run{args.runno:06d}_CoG_cal-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}.root"
-
-  #pdffilename=f"Plotter_cal/Plotter-run{args.runno:06d}-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}.pdf"
-  pdffilename=f"Plotter_cal/Plotter-run{args.runno:06d}_CoG_cal-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}.pdf"
+  inputfilename="root-files/Histos-TJ2-run{:06d}_{}-run{:06d}-run{:06d}_{}-reco.root".format(args.runno,args.prefix,args.runno,args.runno, args.prefix)
+  print(inputfilename)
+  histofilename=f"Plotter_cal/Plotter-run{args.runno:06d}_{args.prefix}_cal-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}.root"
+  pdffilename=f"Plotter_cal/Plotter-run{args.runno:06d}_{args.prefix}_cal-roi-{args.colstart}-{args.colstop}-{args.rowstart}-{args.rowstop}.pdf"
+print(pdffilename)
 
 
 # Open files with reconstructed run data 
@@ -135,7 +120,8 @@ else:
   residuals.plot_roi(inputfile, histofile, basecut="maskedPixel==0 && cellU_fit>{} && cellU_fit<{} && cellV_fit> {} && cellV_fit<{}".format(args.colstart, args.colstop,args.rowstart,args.rowstop), Config=DUTConfig)    
   # Add efficiency plots   
   efficiency.plot(inputfile, histofile, basecut="maskedPixel==0", matchcut="hasHit==0", uaxis=(512,0,512), vaxis=(512,0,512))
-      
+  efficiency.plot(inputfile, histofile, basecut="maskedPixel==0 && cellU_fit>{} && cellU_fit<{} && cellV_fit> {} && cellV_fit<{}".format(args.colstart, args.colstop,args.rowstart,args.rowstop), matchcut="hasHit==0", uaxis=(512,0,512), vaxis=(512,0,512))
+     
   # Add superpixel in-pixel charge plots 
   inpixel.plot_superpixel(inputfile, histofile, pixeltype=0, upitch=DUTConfig['pitch_u'], vpitch=DUTConfig['pitch_v'], ubins=20, vbins=20, ufold=2, vfold=2)             
         

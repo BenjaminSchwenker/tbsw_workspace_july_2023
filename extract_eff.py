@@ -10,8 +10,8 @@ def parse_args():
     parser = ArgumentParser(description='Crawl root files')
     add_arg = parser.add_argument
     add_arg('-s', '--start', type=int, default=1, help='Start run')
-    add_arg('-e', '--end', type=int, default=2, help='End run')
-    add_arg('-p', '--path', type=str, default='/home/bgnet/tbsw_workspace_july_2023/Plotter/', help='Path to root files')
+    add_arg('-e', '--end', type=int, default=1500, help='End run')
+    add_arg('-p', '--path', type=str, default='Plotter/', help='Path to root files')
 
     return parser.parse_args()
 
@@ -20,15 +20,18 @@ def extract_plotter_run_files(path):
     for filename in os.listdir(path):
         if filename.startswith("Plotter-run") and filename.endswith(".root"):
             file_list.append(os.path.join(path, filename))
+    #print(file_list)
     return file_list
 
 def extract_runs_from_files(file_list):
     runs = []
     for filename in file_list:
         parts = filename.split("-")
+        #print(parts)
         for part in parts:
-            if part.startswith("run") and part[3:].isdigit():
-                runs.append(int(part[3:]))
+            if part.startswith("run") and part[3:9].isdigit():
+                runs.append(int(part[3:9]))
+                #print(int(part[3:9]))
                 break
     return runs
 
@@ -47,7 +50,7 @@ def extract_and_add_to_dataframe(file_list):
                 start_col = int(parts[i])
                 stop_col = int(parts[i + 1])
                 start_row = int(parts[i + 2])
-                stop_row = int(parts[i + 3].split(".")[0])
+                stop_row = int(parts[i + 3].split("_")[0].split(".")[0])
 
                 row_data = {
                     'start_col': start_col,
@@ -116,25 +119,25 @@ if __name__ == '__main__':
 
     result_df = extract_and_add_to_dataframe(plotter_run_files)
 
-    result_df['pointing_u'] = extract_pointing(plotter_run_files, "hpoint_resolution_u;2")
-    result_df['pointing_v'] = extract_pointing(plotter_run_files, "hpoint_resolution_v;2")
-    result_df['pointing_error_u'] = extract_pointing(plotter_run_files, "hpoint_resolution_u;2", error=True)
-    result_df['pointing_error_v'] = extract_pointing(plotter_run_files, "hpoint_resolution_v;2", error=True)
-    result_df['cluster_size_u'] = extract_pointing(plotter_run_files, "hsizeU;2", mean=True)
-    result_df['cluster_size_v'] = extract_pointing(plotter_run_files, "hsizeV;2", mean=True)
-    result_df['cluster_size_u_error'] = extract_pointing(plotter_run_files, "hsizeU;2", mean=True, error =True)
-    result_df['cluster_size_v_error'] = extract_pointing(plotter_run_files, "hsizeV;2", mean=True, error =True)
+    result_df['pointing_u'] = extract_pointing(plotter_run_files, "hpoint_resolution_u;1")
+    result_df['pointing_v'] = extract_pointing(plotter_run_files, "hpoint_resolution_v;1")
+    result_df['pointing_error_u'] = extract_pointing(plotter_run_files, "hpoint_resolution_u;1", error=True)
+    result_df['pointing_error_v'] = extract_pointing(plotter_run_files, "hpoint_resolution_v;1", error=True)
+    result_df['cluster_size_u_roi'] = extract_pointing(plotter_run_files, "hsizeUroi;1", mean=True)
+    result_df['cluster_size_v_roi'] = extract_pointing(plotter_run_files, "hsizeVroi;1", mean=True)
+    result_df['cluster_size_u_error_roi'] = extract_pointing(plotter_run_files, "hsizeUroi;1", mean=True, error =True)
+    result_df['cluster_size_v_error_roi'] = extract_pointing(plotter_run_files, "hsizeVroi;1", mean=True, error =True)
     result_df['eff_roi'] = extract_pointing(plotter_run_files, "g_efficiency_roi;1")
     result_df['eff_roi_error'] = extract_pointing(plotter_run_files, "g_efficiency_roi;1", error=True, asym=True)
-    result_df['h_roi_pass'] = extract_pointing(plotter_run_files, "h_roi_pass;1", entrie=True)
-    result_df['h_roi_total'] = extract_pointing(plotter_run_files, "h_roi_total;1", entrie=True)
+    result_df['h_roi_pass'] = extract_pointing(plotter_run_files, "h_track_pass;3", entrie=True)
+    result_df['h_roi_total'] = extract_pointing(plotter_run_files, "h_track_total;3", entrie=True)
 
     # Perform the division
-    result_df['eff'] = result_list = [x[0] / y[0] if y[0] != 0 else 0 for x, y in zip(result_df['h_roi_pass'], result_df['h_roi_total'])]
-    result_df['eff_error'] = result_list = [np.sqrt(((x[0] + 1) * (x[0] + 2) / ((y[0] + 2) * (y[0] + 3))) - ((x[0] + 1)**2 / ((y[0] + 2)**2))) if y[0] != 0 else 0 for x, y in zip(result_df['h_roi_pass'], result_df['h_roi_total'])]
+    result_df['eff'] = result_list = [(x[0] / y[0])*100 if y[0] != 0 else 0 for x, y in zip(result_df['h_roi_pass'], result_df['h_roi_total'])]
+    result_df['eff_error'] = result_list = [(np.sqrt(((x[0] / y[0])*(1-(x[0] / y[0])))/y[0]))*100 if y[0] != 0 else 0 for x, y in zip(result_df['h_roi_pass'], result_df['h_roi_total'])]
     result_df = result_df.sort_index()
     result_df.to_csv(os.path.join(args.path, 'results.csv'))
-    print('finished!')
+    print('finished! Saved to', os.path.join(args.path, 'results.csv') )
 
     
 

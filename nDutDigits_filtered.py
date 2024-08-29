@@ -102,9 +102,12 @@ def process_all_files_in_folder(input_folder, output_folder, csv_filename):
 
 
 if __name__ == "__main__":
-    input_folder_path = "/media/bgnet/TB2023_TBSW_Data/tbsw_workspace_july_2023/root-files"  # Replace with the path to your folder containing ROOT files
-    output_folder_path = "/media/bgnet/TB2023_TBSW_Data/tbsw_workspace_july_2023/nDutDigits_clustDB_1000000ev"  # Replace with the desired path for the output folder
-    csv_filename = "/media/bgnet/TB2023_TBSW_Data/tbsw_workspace_july_2023/nDutDigits_clustDB_1000000ev/max_positions.csv"  # Replace with the desired path for the CSV file
+    #input_folder_path = "/media/bgnet/TB2023_TBSW_Data/tbsw_workspace_july_2023/root-files"  # Replace with the path to your folder containing ROOT files
+    input_folder_path = "root-files" 
+    #output_folder_path = "/media/bgnet/TB2023_TBSW_Data/tbsw_workspace_july_2023/nDutDigits_clustDB_1000000ev"  # Replace with the desired path for the output folder
+    output_folder_path = "nDutDigits_CoG"  # Replace with the desired path for the output folder
+    #csv_filename = "/media/bgnet/TB2023_TBSW_Data/tbsw_workspace_july_2023/nDutDigits_clustDB_1000000ev/max_positions.csv"  # Replace with the desired path for the CSV file
+    csv_filename = "nDutDigits_CoG/max_positions.csv"  # Replace with the desired path for the CSV file
     
     # Check if the file exists
     if os.path.isfile(csv_filename):

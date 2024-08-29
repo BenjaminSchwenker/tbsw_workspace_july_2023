@@ -70,11 +70,11 @@ if __name__ == '__main__':
         detDir = foutfile.mkdir("d" + str(sensorID))  # creating folder for sensor
         detDir.cd()
         funcName = baseCalibFuncName  # function name is the same for all sensors in the file, differentiated by the folders
-        #fucalib = TF1(funcName, "(1*x+0*(10.1/(2*[0]))*(-[1]+[0]*[3]+x+ sqrt([1]**2+4*[0]*[2]+2*[0]*[1]*[3]+x**2+[0]**2*[3]**2-2*[0]*[3]*x-2*[1]*x)))", 0.0, 128.0)  # creating calibration function, use whatever you need as function and range
+        fucalib = TF1(funcName, "(1*x+0*(10.1/(2*[0]))*(-[1]+[0]*[3]+x+ sqrt([1]**2+4*[0]*[2]+2*[0]*[1]*[3]+x**2+[0]**2*[3]**2-2*[0]*[3]*x-2*[1]*x)))", 0.0, 128.0)  # creating calibration function, use whatever you need as function and range
         #fucalib = TF1(funcName, "((10.1/(2*[0]))*(-[1]+[0]*[3]+x+ sqrt([1]**2+4*[0]*[2]+2*[0]*[1]*[3]+x**2+[0]**2*[3]**2-2*[0]*[3]*x-2*[1]*x)))", 0.0, 128.0)  # creating calibration function, use whatever you need as function and range
         #fucalib = TF1(funcName, "x < 40 ? ((10.1/(2*[0]))*(-[1]+[0]*[3]+x+ sqrt([1]**2+4*[0]*[2]+2*[0]*[1]*[3]+x**2+[0]**2*[3]**2-2*[0]*[3]*x-2*[1]*x))) : ((10.1/(2*[0]))*(-[1]+[0]*[3]+40+ sqrt([1]**2+4*[0]*[2]+2*[0]*[1]*[3]+40**2+[0]**2*[3]**2-2*[0]*[3]*40-2*[1]*40)))", 0.0, 128.0)  # creating calibration function, use whatever you need as function and range
         
-        fucalib = TF1(funcName, "((1/(2*[0]))*(-[1]+[0]*[3]+x+ sqrt([1]**2+4*[0]*[2]+2*[0]*[1]*[3]+x**2+[0]**2*[3]**2-2*[0]*[3]*x-2*[1]*x))) > [4] ? ((1/(2*[0]))*(-[1]+[0]*[3]+x+ sqrt([1]**2+4*[0]*[2]+2*[0]*[1]*[3]+x**2+[0]**2*[3]**2-2*[0]*[3]*x-2*[1]*x))) : 0", 0.0, 128.0)  # creating calibration function, use whatever you need as function and range
+        #fucalib = TF1(funcName, "((1/(2*[0]))*(-[1]+[0]*[3]+x+ sqrt([1]**2+4*[0]*[2]+2*[0]*[1]*[3]+x**2+[0]**2*[3]**2-2*[0]*[3]*x-2*[1]*x))) > [4] ? ((1/(2*[0]))*(-[1]+[0]*[3]+x+ sqrt([1]**2+4*[0]*[2]+2*[0]*[1]*[3]+x**2+[0]**2*[3]**2-2*[0]*[3]*x-2*[1]*x))) : 0", 0.0, 128.0)  # creating calibration function, use whatever you need as function and range
 
 
         # setting base parameters could be needed for non standard functions. Consult the TF1 reference.
